@@ -140,7 +140,7 @@ class TransactionsController < ApplicationController
     end
 
     def get_conversion_rate(from_cur, to_cur)
-      api_key = Rails.application.credentials.dig(:currencyapi, :key)
+      api_key = Rails.application.credentials.dig(:currencyapi, :key) || ENV["CURRENCY_API_KEY"]
       raise "API key missing" if api_key.blank?
 
       return 1.0 if from_cur == to_cur
