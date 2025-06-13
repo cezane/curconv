@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      CURRENCY_API_KEY: ${{ secrets.CURRENCY_API_KEY }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
