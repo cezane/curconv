@@ -2,8 +2,10 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :create ]
 
   def create
-    user = User.find_by(email: params[:session][:email])
-    if user&.authenticate(params[:session][:password])
+    email = params[:session] ? params[:session][:email] : params[:email]
+    password = params[:session] ? params[:session][:password] : params[:password]
+    user = User.find_by(email: email)
+    if user&.authenticate(password)
       session[:user_id] = user.id
       respond_to do |format|
         format.html { redirect_to root_path, notice: "Login successful!" }
