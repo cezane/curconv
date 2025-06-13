@@ -35,7 +35,7 @@
         <%= yield %>
         <br>
         <% unless (controller_name == "sessions") || 
-          (controller_name == "users" && params[:action] == "new") %>
+          (controller_name == "users") %>
           <% if current_user %>
             Hello, <%= current_user.name %> |
             <%= button_to "Logout", logout_path, method: :delete, form: { data: { turbo: false }, style: "display:inline;" }, class: "btn btn-link p-0 align-baseline" %>

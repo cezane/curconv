@@ -25,12 +25,12 @@ RSpec.describe 'User Registration', type: :request do
                 },
                 required: [ 'id', 'name', 'email' ]
 
-        let(:user) { { name: 'Jane', email: 'jane@example.com', password: 'secure123' } }
+        let(:user) { { user: { name: 'Jane', email: 'jane@example.com', password: 'secure123' } } }
         run_test!
       end
 
       response '422', 'invalid input' do
-        let(:user) { { name: '', email: '', password: '' } }
+        let(:user) { { user: { name: '', email: '', password: '' } } }
         run_test!
       end
 
@@ -38,7 +38,7 @@ RSpec.describe 'User Registration', type: :request do
         before do
           User.create!(name: 'Jane', email: 'jane@example.com', password: 'secure123')
         end
-        let(:user) { { name: 'Jane', email: 'jane@example.com', password: 'anotherpass' } }
+        let(:user) { { user: { name: 'Jane', email: 'jane@example.com', password: 'anotherpass' } } }
         run_test!
       end
     end
