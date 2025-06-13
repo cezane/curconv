@@ -2,8 +2,8 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :create ]
 
   def create
-    user = User.find_by(email: params[:email])
-    if user&.authenticate(params[:password])
+    user = User.find_by(email: params[:session][:email])
+    if user&.authenticate(params[:session][:password])
       session[:user_id] = user.id
       respond_to do |format|
         format.html { redirect_to root_path, notice: "Login successful!" }
@@ -26,4 +26,10 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to root_path, notice: "Logout successful!"
   end
+end
+
+private
+
+def session_params
+  params.require(:session).permit(:email, :password)
 end

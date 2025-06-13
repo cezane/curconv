@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 
-
 RSpec.configure do |config|
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
@@ -28,48 +27,11 @@ RSpec.configure do |config|
           url: 'https://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'localhost:3000'
+              default: 'www.example.com'
             }
           }
         }
       ]
-    }
-  }
-
-  config.swagger_root = Rails.root.to_s + '/swagger'
-
-  config.swagger_docs = {
-    'v1/swagger.yaml' => {
-      openapi: '3.0.1',
-      info: {
-        title: 'Currency Converter API',
-        version: 'v1',
-        description: 'API for converting currencies and managing transactions.',
-        contact: {
-          name: 'Dalton Cézane',
-          email: 'daltoncezane@email.com'
-        },
-        license: {
-          name: 'MIT',
-          url: 'https://opensource.org/licenses/MIT'
-        }
-      },
-      servers: [
-        {
-          url: 'http://localhost:3000',
-          description: 'Local server'
-        }
-      ],
-      components: {
-        securitySchemes: {
-          cookieAuth: {
-            type: :apiKey,
-            in: :cookie,
-            name: '_yourapp_session'
-          }
-        }
-      },
-      security: [ { cookieAuth: [] } ]
     }
   }
 

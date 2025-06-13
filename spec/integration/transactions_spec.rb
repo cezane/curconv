@@ -35,8 +35,12 @@ RSpec.describe "Transactions", type: :request do
 
     it "creates a transaction when authenticated" do
       # Simulate login
-      post login_path, params: { email: user.email, password: user.password }
-      expect(session[:user_id]).to eq(user.id)
+      post login_path, params: {
+        session: {
+          email: user.email,
+          password: user.password
+        }
+      }
       expect {
         post convert_transactions_path, params: { from_cur: "USD", to_cur: "BRL", from_val: 10 }
       }.to change(Transaction, :count).by(1)

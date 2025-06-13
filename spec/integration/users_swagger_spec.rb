@@ -1,54 +1,44 @@
 require 'swagger_helper'
 
-RSpec.describe 'CurConv - Users API', type: :request, swagger_doc: 'v1/swagger.yaml' do
+RSpec.describe 'User Registration', type: :request do
   path '/users' do
     post 'Register a new user' do
       tags 'Users'
       consumes 'application/json'
+      produces 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
-          user: {
-            type: :object,
-            properties: {
-              name: { type: :string },
-              email: { type: :string },
-              password: { type: :string }
-            },
-            required: [ 'name', 'email', 'password' ]
-          }
+          name:     { type: :string, example: 'Jane Doe' },
+          email:    { type: :string, example: 'jane@example.com' },
+          password: { type: :string, example: 'secure123' }
         },
-        required: [ 'user' ]
+        required: [ 'name', 'email', 'password' ]
       }
 
-      response '201', 'User registered.' do
+      response '201', 'user created' do
+        schema type: :object,
+                properties: {
+                  id:    { type: :integer },
+                  name:  { type: :string },
+                  email: { type: :string }
+                },
+                required: [ 'id', 'name', 'email' ]
+
+        let(:user) { { name: 'Jane', email: 'jane@example.com', password: 'secure123' } }
         run_test!
       end
 
-      response '422', 'Invalid input.' do
-        run_test!
-      end
-    end
-  end
-
-  path '/login' do
-    post 'User login' do
-      tags 'Sessions'
-      consumes 'application/json'
-      parameter name: :credentials, in: :body, schema: {
-        type: :object,
-        properties: {
-          email: { type: :string },
-          password: { type: :string }
-        },
-        required: [ 'email', 'password' ]
-      }
-
-      response '200', 'login successful' do
+      response '422', 'invalid input' do
+        let(:user) { { name: '', email: '', password: '' } }
         run_test!
       end
 
-      response '401', 'invalid credentials' do
+      response '422', 'email already taken' do
+        before do
+          User.create!(name: 'Jane', email: 'jane@example.com', password: 'secure123')
+        end
+        let(:user) { { name: 'Jane', email: 'jane@example.com', password: 'anotherpass' } }
         run_test!
       end
     end

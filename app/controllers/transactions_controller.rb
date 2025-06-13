@@ -135,7 +135,10 @@ class TransactionsController < ApplicationController
 
     def require_login
       unless current_user
-        redirect_to login_path, alert: "You must be logged to convert values."
+        respond_to do |format|
+          format.html { redirect_to login_path, alert: "You must be logged to convert values." }
+          format.json { render json: { error: "You must be logged to convert values." }, status: :unauthorized }
+        end
       end
     end
 

@@ -9,15 +9,23 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
-      redirect_to root_path, notice: "Registration completed successfully!"
+      respond_to do |format|
+        format.json { render json: @user, status: :created }
+        format.any  { render json: @user, status: :created }
+        format.html { redirect_to root_path, notice: "Registration completed successfully!" }
+      end
     else
-      render :new
+      respond_to do |format|
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.any  { render json: @user.errors, status: :unprocessable_entity }
+        format.html { render :new }
+      end
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password)
+    params.permit(:name, :email, :password)
   end
 end
